@@ -1,107 +1,234 @@
-:root{
---color:#F289C8;
-}
+const API_URL="https://nameless-truth-a472.icrm1908.workers.dev"
 
-body{
-margin:0;
-font-family:Arial;
-background:#fafafa;
-}
+let alimentos=JSON.parse(localStorage.getItem("alimentos"))||[]
+let registros=JSON.parse(localStorage.getItem("registros"))||[]
+let pesos=JSON.parse(localStorage.getItem("pesos"))||[]
 
-@media (prefers-color-scheme: dark){
+const mantenimiento=2000
 
-body{
-background:#111;
-color:white;
-}
+function cambiarPantalla(nombre){
+
+document.querySelectorAll(".pantalla").forEach(p=>p.classList.remove("active"))
+
+document.getElementById("pantalla-"+nombre).classList.add("active")
 
 }
 
-header{
-background:var(--color);
-color:white;
-padding:15px;
-text-align:center;
-}
+function guardarAlimento(){
 
-main{
-padding:20px;
-padding-bottom:100px;
-}
+let alimento={
 
-.pantalla{
-display:none;
-}
-
-.pantalla.active{
-display:block;
-}
-
-input,select,button{
-
-width:100%;
-padding:12px;
-margin:6px 0;
-border-radius:10px;
-border:1px solid #ccc;
+nombre:document.getElementById("nombre").value,
+kcal:parseFloat(document.getElementById("kcal").value),
+conversion:parseFloat(document.getElementById("conversion").value)||1
 
 }
 
-button{
-background:var(--color);
-color:white;
-border:none;
-}
+alimentos.push(alimento)
 
-.nav{
+localStorage.setItem("alimentos",JSON.stringify(alimentos))
 
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-
-display:flex;
-
-background:white;
-border-top:1px solid #ddd;
+actualizarAlimentos()
 
 }
 
-.nav button{
+function actualizarAlimentos(){
 
-flex:1;
-font-size:22px;
-background:none;
-border:none;
-padding:15px;
+let select=document.getElementById("listaAlimentos")
+let lista=document.getElementById("listaAlimentosGuardados")
 
-}
+select.innerHTML=""
+lista.innerHTML=""
 
-ul{
-padding:0;
-}
+alimentos.forEach((a,i)=>{
 
-li{
-list-style:none;
-background:white;
-padding:10px;
-margin:4px 0;
-border-radius:8px;
-}
+let option=document.createElement("option")
+option.value=i
+option.textContent=a.nombre
 
-#calendario{
+select.appendChild(option)
 
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:5px;
+let li=document.createElement("li")
+li.textContent=a.nombre+" "+a.kcal+" kcal"
+
+lista.appendChild(li)
+
+})
 
 }
 
-#calendario div{
+function añadirComida(){
 
-background:white;
-padding:10px;
-text-align:center;
-border-radius:6px;
+let fecha=document.getElementById("fechaHoy").value
+let tipo=document.getElementById("tipoComida").value
+let alimento=alimentos[document.getElementById("listaAlimentos").value]
+
+let gramos=document.getElementById("gramos").value
+let estado=document.getElementById("estado").value
+
+if(estado=="cocido"){
+gramos=gramos/alimento.conversion
+}
+
+let kcal=(gramos*alimento.kcal)/100
+
+registros.push({fecha,tipo,alimento:alimento.nombre,gramos,kcal})
+
+localStorage.setItem("registros",JSON.stringify(registros))
+
+mostrarHoy()
 
 }
+
+function mostrarHoy(){
+
+let fecha=document.getElementById("fechaHoy").value
+
+let total=0
+
+document.querySelectorAll("ul").forEach(u=>u.innerHTML="")
+
+registros.filter(r=>r.fecha===fecha).forEach(r=>{
+
+let li=document.createElement("li")
+
+li.textContent=r.alimento+" "+r.gramos+"g ("+r.kcal.toFixed(0)+" kcal)"
+
+document.getElementById(r.tipo.toLowerCase()).appendChild(li)
+
+total+=r.kcal
+
+})
+
+document.getElementById("totalHoy").textContent=total.toFixed(0)
+document.getElementById("deficitHoy").textContent=(mantenimiento-total).toFixed(0)
+
+dibujarCalorias()
+
+}
+
+async function leerEtiqueta(){
+
+let file=document.getElementById("imagen").files[0]
+
+const {data:{text}} = await Tesseract.recognize(file,'spa')
+
+const respuesta=await fetch(API_URL,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({text})
+
+})
+
+const data=await respuesta.json()
+
+console.log(data)
+
+}
+
+async function abrirCamara(){
+
+const stream=await navigator.mediaDevices.getUserMedia({video:true})
+
+document.getElementById("camara").srcObject=stream
+
+}
+
+function capturar(){
+
+let video=document.getElementById("camara")
+let canvas=document.getElementById("foto")
+
+canvas.width=video.videoWidth
+canvas.height=video.videoHeight
+
+let ctx=canvas.getContext("2d")
+
+ctx.drawImage(video,0,0)
+
+}
+
+function guardarPeso(){
+
+let fecha=document.getElementById("fechaHoy").value
+let peso=document.getElementById("pesoInput").value
+
+pesos.push({fecha,peso})
+
+localStorage.setItem("pesos",JSON.stringify(pesos))
+
+dibujarPeso()
+
+}
+
+function dibujarPeso(){
+
+let fechas=pesos.map(p=>p.fecha)
+let valores=pesos.map(p=>p.peso)
+
+new Chart(document.getElementById("graficoPeso"),{
+
+type:"line",
+
+data:{
+labels:fechas,
+datasets:[{label:"Peso",data:valores}]
+}
+
+})
+
+}
+
+function dibujarCalorias(){
+
+let datos={}
+
+registros.forEach(r=>{
+
+if(!datos[r.fecha]) datos[r.fecha]=0
+
+datos[r.fecha]+=r.kcal
+
+})
+
+let fechas=Object.keys(datos)
+let kcal=Object.values(datos)
+
+new Chart(document.getElementById("graficoCalorias"),{
+
+type:"line",
+
+data:{
+labels:fechas,
+datasets:[{label:"Calorías",data:kcal}]
+}
+
+})
+
+}
+
+function generarCalendario(){
+
+let cont=document.getElementById("calendario")
+
+cont.innerHTML=""
+
+for(let i=1;i<=30;i++){
+
+let d=document.createElement("div")
+
+d.textContent=i
+
+cont.appendChild(d)
+
+}
+
+}
+
+actualizarAlimentos()
+generarCalendario()
