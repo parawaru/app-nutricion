@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Mi Nutrición</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<link rel="manifest" href="manifest.json">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+
+</head>
+
+<body>
+
+<h1>Mi Nutrición</h1>
+
+<div id="app"></div>
+
+<script src="app.js"></script>
+
+<script>
+
+if("serviceWorker" in navigator){
+
+navigator.serviceWorker.register("service-worker.js")
+
+}
+
+</script>
+
+</body>
+
+</html>
