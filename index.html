@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Mi Nutrición</title>
-
-<link rel="stylesheet" href="styles.css">
+<title>Registro Kcal</title>
 
 <link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="styles.css">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
@@ -18,22 +18,135 @@
 
 <body>
 
-<h1>Mi Nutrición</h1>
+<div id="app">
 
-<div id="app"></div>
+<header>
+
+<h1>Registro Kcal</h1>
+
+</header>
+
+
+<main>
+
+<section id="pantalla-hoy" class="pantalla active">
+
+<h2>Hoy</h2>
+
+<input type="date" id="fechaHoy">
+
+<div id="listaHoy"></div>
+
+<h3>Total kcal</h3>
+<p id="totalHoy">0</p>
+
+<h3>Ejercicio</h3>
+
+<input id="ejercicioNombreHoy" placeholder="Ejercicio">
+<input id="ejercicioKcalHoy" placeholder="Kcal">
+
+<button onclick="añadirEjercicio()">Añadir ejercicio</button>
+
+</section>
+
+
+<section id="pantalla-registrar" class="pantalla">
+
+<h2>Registrar comida</h2>
+
+<select id="tipoComida">
+
+<option>Desayuno</option>
+<option>Almuerzo</option>
+<option>Comida</option>
+<option>Merienda</option>
+<option>Cena</option>
+
+</select>
+
+<select id="listaAlimentos"></select>
+
+<input id="gramos" placeholder="Gramos">
+
+<button onclick="añadirComida()">Añadir comida</button>
+
+</section>
+
+
+<section id="pantalla-alimentos" class="pantalla">
+
+<h2>Alimentos</h2>
+
+<input type="file" id="imagen">
+
+<button onclick="leerEtiqueta()">Leer etiqueta</button>
+
+<input id="nombre" placeholder="Nombre">
+<input id="kcal" placeholder="Kcal /100g">
+<input id="proteinas" placeholder="Proteínas">
+<input id="hidratos" placeholder="Hidratos">
+<input id="grasas" placeholder="Grasas">
+
+<button onclick="guardarAlimento()">Guardar alimento</button>
+
+<ul id="listaAlimentosGuardados"></ul>
+
+</section>
+
+
+<section id="pantalla-progreso" class="pantalla">
+
+<h2>Progreso</h2>
+
+<h3>Gráfico calorías</h3>
+
+<canvas id="graficoCalorias"></canvas>
+
+<h3>Peso</h3>
+
+<input id="pesoInput" placeholder="Peso">
+
+<button onclick="guardarPeso()">Guardar peso</button>
+
+<canvas id="graficoPeso"></canvas>
+
+</section>
+
+
+<section id="pantalla-historial" class="pantalla">
+
+<h2>Historial</h2>
+
+<input type="date" id="fechaHistorial">
+
+<button onclick="verHistorial()">Ver día</button>
+
+<ul id="historialLista"></ul>
+
+</section>
+
+</main>
+
+
+<nav class="nav">
+
+<button onclick="cambiarPantalla('hoy')">🏠</button>
+<button onclick="cambiarPantalla('registrar')">🍽</button>
+<button onclick="cambiarPantalla('alimentos')">📦</button>
+<button onclick="cambiarPantalla('progreso')">📊</button>
+<button onclick="cambiarPantalla('historial')">📅</button>
+
+</nav>
+
+</div>
 
 <script src="app.js"></script>
 
 <script>
-
-if("serviceWorker" in navigator){
-
+if ("serviceWorker" in navigator) {
 navigator.serviceWorker.register("service-worker.js")
-
 }
-
 </script>
 
 </body>
-
 </html>
