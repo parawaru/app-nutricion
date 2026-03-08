@@ -1,60 +1,51 @@
-document.getElementById("app").innerHTML = `
-
-<h2>Registrar comida</h2>
-
-<input type="date" id="fecha">
-
-<select id="tipo">
-
-<option>Desayuno</option>
-<option>Almuerzo</option>
-<option>Comida</option>
-<option>Merienda</option>
-<option>Cena</option>
-
-</select>
-
-<input id="alimento" placeholder="alimento">
-
-<input id="kcal" placeholder="kcal">
-
-<button onclick="guardar()">Guardar</button>
-
-<ul id="lista"></ul>
-
-`
-
+let alimentos = JSON.parse(localStorage.getItem("alimentos")) || []
 let registros = JSON.parse(localStorage.getItem("registros")) || []
+let ejercicios = JSON.parse(localStorage.getItem("ejercicios")) || []
+let pesos = JSON.parse(localStorage.getItem("pesos")) || []
 
-function guardar(){
+function cambiarPantalla(nombre){
 
-let fecha=document.getElementById("fecha").value
+document.querySelectorAll(".pantalla").forEach(p=>p.classList.remove("active"))
 
-let tipo=document.getElementById("tipo").value
-
-let alimento=document.getElementById("alimento").value
-
-let kcal=document.getElementById("kcal").value
-
-registros.push({fecha,tipo,alimento,kcal})
-
-localStorage.setItem("registros",JSON.stringify(registros))
-
-mostrar()
+document.getElementById("pantalla-"+nombre).classList.add("active")
 
 }
 
-function mostrar(){
+function guardarAlimento(){
 
-let lista=document.getElementById("lista")
+let alimento={
 
+nombre:document.getElementById("nombre").value,
+kcal:parseFloat(document.getElementById("kcal").value)
+
+}
+
+alimentos.push(alimento)
+
+localStorage.setItem("alimentos",JSON.stringify(alimentos))
+
+actualizarAlimentos()
+
+}
+
+function actualizarAlimentos(){
+
+let select=document.getElementById("listaAlimentos")
+let lista=document.getElementById("listaAlimentosGuardados")
+
+select.innerHTML=""
 lista.innerHTML=""
 
-registros.forEach(r=>{
+alimentos.forEach((a,i)=>{
+
+let option=document.createElement("option")
+option.value=i
+option.textContent=a.nombre
+
+select.appendChild(option)
 
 let li=document.createElement("li")
-
-li.textContent=r.fecha+" "+r.tipo+" "+r.alimento+" "+r.kcal+" kcal"
+li.textContent=a.nombre+" "+a.kcal+" kcal"
 
 lista.appendChild(li)
 
@@ -62,4 +53,59 @@ lista.appendChild(li)
 
 }
 
-mostrar()
+function añadirComida(){
+
+let fecha=document.getElementById("fechaHoy").value
+let tipo=document.getElementById("tipoComida").value
+let alimento=alimentos[document.getElementById("listaAlimentos").value]
+let gramos=document.getElementById("gramos").value
+
+let kcal=(gramos*alimento.kcal)/100
+
+registros.push({fecha,tipo,alimento:alimento.nombre,gramos,kcal})
+
+localStorage.setItem("registros",JSON.stringify(registros))
+
+mostrarHoy()
+
+}
+
+function mostrarHoy(){
+
+let fecha=document.getElementById("fechaHoy").value
+
+let lista=document.getElementById("listaHoy")
+
+lista.innerHTML=""
+
+let total=0
+
+registros.filter(r=>r.fecha===fecha).forEach(r=>{
+
+let li=document.createElement("li")
+
+li.textContent=r.tipo+" - "+r.alimento+" "+r.gramos+"g ("+r.kcal.toFixed(0)+" kcal)"
+
+lista.appendChild(li)
+
+total+=r.kcal
+
+})
+
+document.getElementById("totalHoy").textContent=total.toFixed(0)
+
+}
+
+function añadirEjercicio(){
+
+let fecha=document.getElementById("fechaHoy").value
+let nombre=document.getElementById("ejercicioNombreHoy").value
+let kcal=document.getElementById("ejercicioKcalHoy").value
+
+ejercicios.push({fecha,nombre,kcal})
+
+localStorage.setItem("ejercicios",JSON.stringify(ejercicios))
+
+}
+
+actualizarAlimentos()
