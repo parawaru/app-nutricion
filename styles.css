@@ -1,231 +1,187 @@
 :root{
---color:#F289C8;
---bg:#fafafa;
---card:#ffffff;
---text:#333;
-}
 
-*{
-box-sizing:border-box;
+--bg:#0f1117;
+--card:#1a1d26;
+--accent:#F289C8;
+--text:#fff;
+--text2:#9ca3af;
+
 }
 
 body{
 
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial;
+
+font-family:-apple-system;
+
 background:var(--bg);
+
 color:var(--text);
 
-}
-
-/* MODO OSCURO AUTOMÁTICO */
-
-@media (prefers-color-scheme: dark){
-
-:root{
-
---bg:#111;
---card:#1c1c1e;
---text:#fff;
+padding-bottom:90px;
 
 }
-
-}
-
-/* HEADER */
 
 header{
 
-background:var(--color);
-color:white;
-padding:16px;
 text-align:center;
-font-weight:600;
-font-size:20px;
+
+padding:18px;
+
+font-size:22px;
+
+font-weight:700;
+
+background:#151822;
 
 }
-
-/* CONTENEDOR APP */
 
 main{
 
-max-width:430px;
-margin:auto;
 padding:16px;
-padding-bottom:100px;
 
 }
 
-/* PANTALLAS */
+.card{
 
-.pantalla{
-
-display:none;
-
-}
-
-.pantalla.active{
-
-display:block;
-
-}
-
-/* INPUTS */
-
-input,select{
-
-width:100%;
-padding:12px;
-margin-top:8px;
-margin-bottom:12px;
-border-radius:10px;
-border:1px solid #ddd;
-font-size:16px;
-background:white;
-
-}
-
-/* BOTONES */
-
-button{
-
-width:100%;
-padding:14px;
-border:none;
-border-radius:10px;
-background:var(--color);
-color:white;
-font-weight:600;
-font-size:16px;
-margin-bottom:10px;
-
-}
-
-/* LISTAS DE COMIDA */
-
-ul{
-
-padding:0;
-margin:0;
-
-}
-
-li{
-
-list-style:none;
 background:var(--card);
-padding:12px;
-margin-bottom:8px;
-border-radius:10px;
+
+border-radius:16px;
+
+padding:20px;
+
+margin-bottom:20px;
+
+}
+
+.circle{
+
+width:160px;
+
+height:160px;
+
+border-radius:50%;
+
+border:12px solid var(--accent);
 
 display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:30px;
+
+margin:auto;
+
+}
+
+.stats{
+
+display:flex;
+
+justify-content:space-around;
+
+margin-top:20px;
+
+}
+
+.meal{
+
+background:var(--card);
+
+padding:16px;
+
+border-radius:14px;
+
+margin-bottom:16px;
+
+}
+
+.food{
+
+display:flex;
+
 justify-content:space-between;
+
+padding:10px 0;
+
+border-bottom:1px solid #2a2e3a;
+
+}
+
+.fab{
+
+position:fixed;
+
+bottom:70px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+width:65px;
+
+height:65px;
+
+border-radius:50%;
+
+background:var(--accent);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:32px;
+
+}
+
+.navbar{
+
+position:fixed;
+
+bottom:0;
+
+width:100%;
+
+height:70px;
+
+background:#0c0e13;
+
+display:flex;
+
+justify-content:space-around;
+
 align-items:center;
 
 }
 
-/* BOTÓN BORRAR */
-
-li button{
-
-width:auto;
-background:#ff4d6d;
-padding:6px 10px;
-font-size:14px;
-
-}
-
-/* SECCIÓN COMIDAS */
-
-.comidas h3{
-
-margin-top:18px;
-margin-bottom:6px;
-font-size:18px;
-
-}
-
-/* TOTALES */
-
-#totalHoy,
-#deficitHoy{
-
-font-size:22px;
-font-weight:600;
-margin-bottom:12px;
-
-}
-
-/* CALENDARIO */
-
-#calendario{
-
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:6px;
-margin-top:10px;
-
-}
-
-#calendario div{
-
-background:var(--card);
-padding:10px;
-text-align:center;
-border-radius:8px;
-font-size:14px;
-
-}
-
-/* VIDEO CÁMARA */
-
-video{
-
-width:100%;
-border-radius:10px;
-margin-top:10px;
-
-}
-
-/* NAVEGACIÓN INFERIOR */
-
 .nav{
 
-position:fixed;
-bottom:0;
-left:0;
-right:0;
+font-size:12px;
 
-display:flex;
-justify-content:space-around;
-
-background:var(--card);
-border-top:1px solid #ddd;
-
-max-width:430px;
-margin:auto;
+color:var(--text2);
 
 }
 
-/* BOTONES NAV */
+.nav.active{
 
-.nav button{
+color:var(--accent);
 
-flex:1;
-background:none;
+}
+
+button{
+
+background:var(--accent);
+
 border:none;
-font-size:22px;
-padding:14px;
 
-}
+padding:10px 14px;
 
-/* GRÁFICOS */
+border-radius:10px;
 
-canvas{
-
-margin-top:20px;
-background:var(--card);
-border-radius:12px;
-padding:10px;
+color:white;
 
 }

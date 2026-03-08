@@ -1,163 +1,159 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Registro Kcal</title>
 
-<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="styles.css">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+<link rel="manifest" href="manifest.json">
 
 </head>
 
 <body>
 
 <header>
-<h1>Registro Kcal</h1>
+
+Registro Kcal
+
 </header>
 
-<main>
+<main id="app">
 
-<section id="pantalla-hoy" class="pantalla active">
+<section id="dashboard">
 
-<input type="date" id="fechaHoy">
+<div class="card">
 
-<div class="comidas">
+<h2>Calorías restantes</h2>
 
-<h3>Desayuno</h3>
-<ul id="desayuno"></ul>
+<div class="circle" id="circle">
 
-<h3>Almuerzo</h3>
-<ul id="almuerzo"></ul>
-
-<h3>Comida</h3>
-<ul id="comida"></ul>
-
-<h3>Merienda</h3>
-<ul id="merienda"></ul>
-
-<h3>Cena</h3>
-<ul id="cena"></ul>
+<span id="remaining">1400</span>
 
 </div>
 
-<h3>Total kcal</h3>
-<p id="totalHoy">0</p>
+<div class="stats">
 
-<h3>Déficit</h3>
-<p id="deficitHoy">0</p>
+<div>
 
-</section>
+Objetivo
 
-<section id="pantalla-registrar" class="pantalla">
+<span id="goal">1400</span>
 
-<h2>Añadir comida</h2>
+</div>
 
-<select id="tipoComida">
+<div>
 
-<option>Desayuno</option>
-<option>Almuerzo</option>
-<option>Comida</option>
-<option>Merienda</option>
-<option>Cena</option>
+Alimentos
 
-</select>
+<span id="foodTotal">0</span>
 
-<select id="listaAlimentos"></select>
+</div>
 
-<input id="gramos" placeholder="Gramos">
+<div>
 
-<select id="estado">
+Ejercicio
 
-<option value="seco">Seco</option>
-<option value="cocido">Cocido</option>
+<span id="exercise">0</span>
 
-</select>
+</div>
 
-<button onclick="añadirComida()">Añadir</button>
+</div>
 
-<h3>Botones rápidos</h3>
-
-<button onclick="añadirRapido('arroz',70)">Arroz 70g</button>
-<button onclick="añadirRapido('pollo',120)">Pollo 120g</button>
-<button onclick="añadirRapido('yogur',125)">Yogur</button>
+</div>
 
 </section>
 
-<section id="pantalla-alimentos" class="pantalla">
 
-<h2>Alimentos</h2>
+<section id="diario">
 
-<input id="nombre" placeholder="Nombre alimento">
-<input id="kcal" placeholder="Kcal /100g">
-<input id="conversion" placeholder="Factor cocido (ej arroz 3)">
+<div class="meal">
 
-<button onclick="guardarAlimento()">Guardar alimento</button>
+<h3>Desayuno</h3>
 
-<ul id="listaAlimentosGuardados"></ul>
+<div id="desayuno"></div>
 
-<h3>Escanear etiqueta</h3>
+<button onclick="addFood('desayuno')">
 
-<input type="file" id="imagen">
-<button onclick="leerEtiqueta()">Leer etiqueta</button>
+Agregar alimento
 
-<h3>Escanear con cámara</h3>
+</button>
 
-<video id="camara" autoplay></video>
-<button onclick="abrirCamara()">Abrir cámara</button>
-<button onclick="capturar()">Capturar</button>
+</div>
 
-<canvas id="foto"></canvas>
+<div class="meal">
+
+<h3>Comida</h3>
+
+<div id="comida"></div>
+
+<button onclick="addFood('comida')">
+
+Agregar alimento
+
+</button>
+
+</div>
+
+<div class="meal">
+
+<h3>Cena</h3>
+
+<div id="cena"></div>
+
+<button onclick="addFood('cena')">
+
+Agregar alimento
+
+</button>
+
+</div>
 
 </section>
 
-<section id="pantalla-progreso" class="pantalla">
+<section id="progreso">
 
-<h2>Progreso</h2>
+<div class="card">
 
-<input id="pesoInput" placeholder="Peso">
+<h2>Peso</h2>
 
-<button onclick="guardarPeso()">Guardar peso</button>
+<canvas id="weightChart"></canvas>
 
-<canvas id="graficoPeso"></canvas>
+</div>
 
-<canvas id="graficoCalorias"></canvas>
+<div class="card">
 
-</section>
+<h2>Calorías</h2>
 
-<section id="pantalla-calendario" class="pantalla">
+<canvas id="kcalChart"></canvas>
 
-<h2>Calendario</h2>
-
-<div id="calendario"></div>
+</div>
 
 </section>
 
 </main>
 
-<nav class="nav">
+<div class="fab" onclick="quickAdd()">+</div>
 
-<button onclick="cambiarPantalla('hoy')">🏠</button>
-<button onclick="cambiarPantalla('registrar')">🍽</button>
-<button onclick="cambiarPantalla('alimentos')">📦</button>
-<button onclick="cambiarPantalla('progreso')">📊</button>
-<button onclick="cambiarPantalla('calendario')">📅</button>
+<nav class="navbar">
+
+<div class="nav active">Panel</div>
+
+<div class="nav">Diario</div>
+
+<div class="nav">Progreso</div>
+
+<div class="nav">Más</div>
 
 </nav>
 
+<script src="database.js"></script>
+<script src="charts.js"></script>
+<script src="ai.js"></script>
 <script src="app.js"></script>
 
-<script>
-if("serviceWorker" in navigator){
-navigator.serviceWorker.register("service-worker.js")
-}
-</script>
-
 </body>
+
 </html>
