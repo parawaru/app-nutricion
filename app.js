@@ -72,7 +72,28 @@ gramos=gramos/alimento.conversion
 
 let kcal=(gramos*alimento.kcal)/100
 
-registros.push({fecha,tipo,alimento:alimento.nombre,gramos,kcal})
+let registro={
+
+id:Date.now(),
+fecha,
+tipo,
+alimento:alimento.nombre,
+gramos,
+kcal
+
+}
+
+registros.push(registro)
+
+localStorage.setItem("registros",JSON.stringify(registros))
+
+mostrarHoy()
+
+}
+
+function eliminarRegistro(id){
+
+registros=registros.filter(r=>r.id!==id)
 
 localStorage.setItem("registros",JSON.stringify(registros))
 
@@ -92,7 +113,10 @@ registros.filter(r=>r.fecha===fecha).forEach(r=>{
 
 let li=document.createElement("li")
 
-li.textContent=r.alimento+" "+r.gramos+"g ("+r.kcal.toFixed(0)+" kcal)"
+li.innerHTML=`
+${r.alimento} ${r.gramos}g (${r.kcal.toFixed(0)} kcal)
+<button onclick="eliminarRegistro(${r.id})">❌</button>
+`
 
 document.getElementById(r.tipo.toLowerCase()).appendChild(li)
 
@@ -101,6 +125,7 @@ total+=r.kcal
 })
 
 document.getElementById("totalHoy").textContent=total.toFixed(0)
+
 document.getElementById("deficitHoy").textContent=(mantenimiento-total).toFixed(0)
 
 dibujarCalorias()
@@ -127,7 +152,17 @@ body:JSON.stringify({text})
 
 const data=await respuesta.json()
 
+try{
+
+let resultado=JSON.parse(data.choices[0].message.content)
+
+document.getElementById("kcal").value=resultado.kcal
+
+}catch{
+
 console.log(data)
+
+}
 
 }
 
@@ -177,7 +212,12 @@ type:"line",
 
 data:{
 labels:fechas,
-datasets:[{label:"Peso",data:valores}]
+datasets:[{
+label:"Peso",
+data:valores,
+borderColor:"#F289C8",
+fill:false
+}]
 }
 
 })
@@ -205,7 +245,12 @@ type:"line",
 
 data:{
 labels:fechas,
-datasets:[{label:"Calorías",data:kcal}]
+datasets:[{
+label:"Calorías",
+data:kcal,
+borderColor:"#F289C8",
+fill:false
+}]
 }
 
 })
@@ -227,6 +272,26 @@ d.textContent=i
 cont.appendChild(d)
 
 }
+
+}
+
+function backupNube(){
+
+fetch("https://jsonbin.io/v3/b",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+alimentos,
+registros,
+pesos
+})
+
+})
 
 }
 

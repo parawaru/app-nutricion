@@ -1,57 +1,193 @@
 :root{
 --color:#F289C8;
+--bg:#fafafa;
+--card:#ffffff;
+--text:#333;
+}
+
+*{
+box-sizing:border-box;
 }
 
 body{
+
 margin:0;
-font-family:Arial;
-background:#fafafa;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial;
+background:var(--bg);
+color:var(--text);
+
 }
+
+/* MODO OSCURO AUTOMÁTICO */
 
 @media (prefers-color-scheme: dark){
 
-body{
-background:#111;
-color:white;
+:root{
+
+--bg:#111;
+--card:#1c1c1e;
+--text:#fff;
+
 }
 
 }
+
+/* HEADER */
 
 header{
+
 background:var(--color);
 color:white;
-padding:15px;
+padding:16px;
 text-align:center;
+font-weight:600;
+font-size:20px;
+
 }
+
+/* CONTENEDOR APP */
 
 main{
-padding:20px;
+
+max-width:430px;
+margin:auto;
+padding:16px;
 padding-bottom:100px;
+
 }
 
+/* PANTALLAS */
+
 .pantalla{
+
 display:none;
+
 }
 
 .pantalla.active{
+
 display:block;
+
 }
 
-input,select,button{
+/* INPUTS */
+
+input,select{
 
 width:100%;
 padding:12px;
-margin:6px 0;
+margin-top:8px;
+margin-bottom:12px;
 border-radius:10px;
-border:1px solid #ccc;
+border:1px solid #ddd;
+font-size:16px;
+background:white;
 
 }
+
+/* BOTONES */
 
 button{
+
+width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
 background:var(--color);
 color:white;
-border:none;
+font-weight:600;
+font-size:16px;
+margin-bottom:10px;
+
 }
+
+/* LISTAS DE COMIDA */
+
+ul{
+
+padding:0;
+margin:0;
+
+}
+
+li{
+
+list-style:none;
+background:var(--card);
+padding:12px;
+margin-bottom:8px;
+border-radius:10px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+}
+
+/* BOTÓN BORRAR */
+
+li button{
+
+width:auto;
+background:#ff4d6d;
+padding:6px 10px;
+font-size:14px;
+
+}
+
+/* SECCIÓN COMIDAS */
+
+.comidas h3{
+
+margin-top:18px;
+margin-bottom:6px;
+font-size:18px;
+
+}
+
+/* TOTALES */
+
+#totalHoy,
+#deficitHoy{
+
+font-size:22px;
+font-weight:600;
+margin-bottom:12px;
+
+}
+
+/* CALENDARIO */
+
+#calendario{
+
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:6px;
+margin-top:10px;
+
+}
+
+#calendario div{
+
+background:var(--card);
+padding:10px;
+text-align:center;
+border-radius:8px;
+font-size:14px;
+
+}
+
+/* VIDEO CÁMARA */
+
+video{
+
+width:100%;
+border-radius:10px;
+margin-top:10px;
+
+}
+
+/* NAVEGACIÓN INFERIOR */
 
 .nav{
 
@@ -61,40 +197,35 @@ left:0;
 right:0;
 
 display:flex;
-background:white;
+justify-content:space-around;
+
+background:var(--card);
 border-top:1px solid #ddd;
 
+max-width:430px;
+margin:auto;
+
 }
+
+/* BOTONES NAV */
 
 .nav button{
+
 flex:1;
-font-size:22px;
 background:none;
 border:none;
-padding:15px;
+font-size:22px;
+padding:14px;
+
 }
 
-ul{
-padding:0;
-}
+/* GRÁFICOS */
 
-li{
-list-style:none;
-background:white;
+canvas{
+
+margin-top:20px;
+background:var(--card);
+border-radius:12px;
 padding:10px;
-margin:4px 0;
-border-radius:8px;
-}
 
-#calendario{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:5px;
-}
-
-#calendario div{
-background:white;
-padding:10px;
-text-align:center;
-border-radius:6px;
 }
