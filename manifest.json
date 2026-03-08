@@ -3,8 +3,8 @@
 "short_name": "Kcal",
 "start_url": "index.html",
 "display": "standalone",
-"background_color": "#ffffff",
-"theme_color": "#27ae60",
+"background_color": "#F289C8",
+"theme_color": "#F289C8",
 "icons":[
 {
 "src":"icon-192.png",

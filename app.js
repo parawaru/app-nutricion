@@ -1,191 +1,107 @@
-let alimentos = JSON.parse(localStorage.getItem("alimentos")) || []
-let registros = JSON.parse(localStorage.getItem("registros")) || []
-let pesos = JSON.parse(localStorage.getItem("pesos")) || []
+:root{
+--color:#F289C8;
+}
 
-function cambiarPantalla(nombre){
+body{
+margin:0;
+font-family:Arial;
+background:#fafafa;
+}
 
-document.querySelectorAll(".pantalla").forEach(p=>p.classList.remove("active"))
+@media (prefers-color-scheme: dark){
 
-document.getElementById("pantalla-"+nombre).classList.add("active")
+body{
+background:#111;
+color:white;
+}
 
 }
 
-function guardarAlimento(){
+header{
+background:var(--color);
+color:white;
+padding:15px;
+text-align:center;
+}
 
-let alimento={
+main{
+padding:20px;
+padding-bottom:100px;
+}
 
-nombre:document.getElementById("nombre").value,
-kcal:parseFloat(document.getElementById("kcal").value)
+.pantalla{
+display:none;
+}
+
+.pantalla.active{
+display:block;
+}
+
+input,select,button{
+
+width:100%;
+padding:12px;
+margin:6px 0;
+border-radius:10px;
+border:1px solid #ccc;
 
 }
 
-alimentos.push(alimento)
+button{
+background:var(--color);
+color:white;
+border:none;
+}
 
-localStorage.setItem("alimentos",JSON.stringify(alimentos))
+.nav{
 
-actualizarAlimentos()
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+
+display:flex;
+
+background:white;
+border-top:1px solid #ddd;
 
 }
 
-function actualizarAlimentos(){
+.nav button{
 
-let select=document.getElementById("listaAlimentos")
-let lista=document.getElementById("listaAlimentosGuardados")
-
-select.innerHTML=""
-lista.innerHTML=""
-
-alimentos.forEach((a,i)=>{
-
-let option=document.createElement("option")
-option.value=i
-option.textContent=a.nombre
-
-select.appendChild(option)
-
-let li=document.createElement("li")
-li.textContent=a.nombre+" "+a.kcal+" kcal"
-
-lista.appendChild(li)
-
-})
+flex:1;
+font-size:22px;
+background:none;
+border:none;
+padding:15px;
 
 }
 
-function añadirComida(){
+ul{
+padding:0;
+}
 
-let fecha=document.getElementById("fechaHoy").value
-let tipo=document.getElementById("tipoComida").value
-let alimento=alimentos[document.getElementById("listaAlimentos").value]
-let gramos=document.getElementById("gramos").value
+li{
+list-style:none;
+background:white;
+padding:10px;
+margin:4px 0;
+border-radius:8px;
+}
 
-let kcal=(gramos*alimento.kcal)/100
+#calendario{
 
-registros.push({fecha,tipo,alimento:alimento.nombre,gramos,kcal})
-
-localStorage.setItem("registros",JSON.stringify(registros))
-
-mostrarHoy()
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:5px;
 
 }
 
-function mostrarHoy(){
+#calendario div{
 
-let fecha=document.getElementById("fechaHoy").value
-
-let total=0
-
-document.querySelectorAll("ul").forEach(u=>u.innerHTML="")
-
-registros.filter(r=>r.fecha===fecha).forEach(r=>{
-
-let li=document.createElement("li")
-
-li.textContent=r.alimento+" "+r.gramos+"g ("+r.kcal.toFixed(0)+" kcal)"
-
-document.getElementById(r.tipo.toLowerCase()).appendChild(li)
-
-total+=r.kcal
-
-})
-
-document.getElementById("totalHoy").textContent=total.toFixed(0)
-
-dibujarCalorias()
+background:white;
+padding:10px;
+text-align:center;
+border-radius:6px;
 
 }
-
-function guardarPeso(){
-
-let fecha=document.getElementById("fechaHoy").value
-let peso=document.getElementById("pesoInput").value
-
-pesos.push({fecha,peso})
-
-localStorage.setItem("pesos",JSON.stringify(pesos))
-
-dibujarPeso()
-
-}
-
-function dibujarPeso(){
-
-let fechas=pesos.map(p=>p.fecha)
-let valores=pesos.map(p=>p.peso)
-
-new Chart(document.getElementById("graficoPeso"),{
-
-type:"line",
-
-data:{
-labels:fechas,
-datasets:[{label:"Peso",data:valores}]
-}
-
-})
-
-}
-
-function dibujarCalorias(){
-
-let datos={}
-
-registros.forEach(r=>{
-
-if(!datos[r.fecha]) datos[r.fecha]=0
-
-datos[r.fecha]+=r.kcal
-
-})
-
-let fechas=Object.keys(datos)
-let kcal=Object.values(datos)
-
-new Chart(document.getElementById("graficoCalorias"),{
-
-type:"line",
-
-data:{
-labels:fechas,
-datasets:[{label:"Calorías",data:kcal}]
-}
-
-})
-
-}
-
-function verHistorial(){
-
-let fecha=document.getElementById("fechaHistorial").value
-
-let lista=document.getElementById("historialLista")
-
-lista.innerHTML=""
-
-registros.filter(r=>r.fecha===fecha).forEach(r=>{
-
-let li=document.createElement("li")
-
-li.textContent=r.tipo+" "+r.alimento+" "+r.gramos+"g"
-
-lista.appendChild(li)
-
-})
-
-}
-
-function leerEtiqueta(){
-
-let file=document.getElementById("imagen").files[0]
-
-Tesseract.recognize(file,'spa').then(({data:{text}})=>{
-
-let kcal=text.match(/\d+\s?kcal/i)
-
-if(kcal) document.getElementById("kcal").value=kcal[0].replace("kcal","")
-
-})
-
-}
-
-actualizarAlimentos()

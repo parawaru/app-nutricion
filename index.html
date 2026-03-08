@@ -26,11 +26,9 @@
 
 <section id="pantalla-hoy" class="pantalla active">
 
-<h2>Hoy</h2>
-
 <input type="date" id="fechaHoy">
 
-<div class="comida">
+<div class="comidas">
 
 <h3>Desayuno</h3>
 <ul id="desayuno"></ul>
@@ -52,31 +50,53 @@
 <h3>Total kcal</h3>
 <p id="totalHoy">0</p>
 
-</section>
+<h3>Déficit</h3>
+<p id="deficitHoy">0</p>
 
+</section>
 
 <section id="pantalla-registrar" class="pantalla">
 
 <h2>Registrar comida</h2>
 
 <select id="tipoComida">
-
 <option>Desayuno</option>
 <option>Almuerzo</option>
 <option>Comida</option>
 <option>Merienda</option>
 <option>Cena</option>
-
 </select>
 
 <select id="listaAlimentos"></select>
 
 <input id="gramos" placeholder="Gramos">
 
+<select id="estado">
+<option value="seco">Seco</option>
+<option value="cocido">Cocido</option>
+</select>
+
 <button onclick="añadirComida()">Añadir comida</button>
+
+<h3>Botones rápidos</h3>
+
+<button onclick="añadirRapido('arroz',70)">Arroz 70g</button>
+<button onclick="añadirRapido('pollo',120)">Pollo 120g</button>
+<button onclick="añadirRapido('yogur',125)">Yogur</button>
 
 </section>
 
+<section id="pantalla-platos" class="pantalla">
+
+<h2>Platos</h2>
+
+<input id="nombrePlato" placeholder="Nombre del plato">
+
+<button onclick="guardarPlato()">Guardar plato</button>
+
+<ul id="listaPlatos"></ul>
+
+</section>
 
 <section id="pantalla-alimentos" class="pantalla">
 
@@ -89,53 +109,44 @@
 <input id="nombre" placeholder="Nombre alimento">
 <input id="kcal" placeholder="Kcal /100g">
 
+<input id="conversion" placeholder="Factor cocido (ej: arroz 3)">
+
 <button onclick="guardarAlimento()">Guardar alimento</button>
 
 <ul id="listaAlimentosGuardados"></ul>
 
 </section>
 
+<section id="pantalla-calendario" class="pantalla">
+
+<h2>Calendario</h2>
+
+<div id="calendario"></div>
+
+</section>
 
 <section id="pantalla-progreso" class="pantalla">
 
 <h2>Progreso</h2>
 
-<h3>Gráfico calorías</h3>
-<canvas id="graficoCalorias"></canvas>
-
-<h3>Peso</h3>
-
 <input id="pesoInput" placeholder="Peso">
-
 <button onclick="guardarPeso()">Guardar peso</button>
 
 <canvas id="graficoPeso"></canvas>
-
-</section>
-
-
-<section id="pantalla-historial" class="pantalla">
-
-<h2>Historial</h2>
-
-<input type="date" id="fechaHistorial">
-
-<button onclick="verHistorial()">Ver día</button>
-
-<ul id="historialLista"></ul>
+<canvas id="graficoCalorias"></canvas>
 
 </section>
 
 </main>
 
-
 <nav class="nav">
 
 <button onclick="cambiarPantalla('hoy')">🏠</button>
 <button onclick="cambiarPantalla('registrar')">🍽</button>
+<button onclick="cambiarPantalla('platos')">🍲</button>
 <button onclick="cambiarPantalla('alimentos')">📦</button>
+<button onclick="cambiarPantalla('calendario')">📅</button>
 <button onclick="cambiarPantalla('progreso')">📊</button>
-<button onclick="cambiarPantalla('historial')">📅</button>
 
 </nav>
 
