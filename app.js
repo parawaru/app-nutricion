@@ -1,6 +1,5 @@
 let alimentos = JSON.parse(localStorage.getItem("alimentos")) || []
 let registros = JSON.parse(localStorage.getItem("registros")) || []
-let ejercicios = JSON.parse(localStorage.getItem("ejercicios")) || []
 let pesos = JSON.parse(localStorage.getItem("pesos")) || []
 
 function cambiarPantalla(nombre){
@@ -74,19 +73,17 @@ function mostrarHoy(){
 
 let fecha=document.getElementById("fechaHoy").value
 
-let lista=document.getElementById("listaHoy")
-
-lista.innerHTML=""
-
 let total=0
+
+document.querySelectorAll("ul").forEach(u=>u.innerHTML="")
 
 registros.filter(r=>r.fecha===fecha).forEach(r=>{
 
 let li=document.createElement("li")
 
-li.textContent=r.tipo+" - "+r.alimento+" "+r.gramos+"g ("+r.kcal.toFixed(0)+" kcal)"
+li.textContent=r.alimento+" "+r.gramos+"g ("+r.kcal.toFixed(0)+" kcal)"
 
-lista.appendChild(li)
+document.getElementById(r.tipo.toLowerCase()).appendChild(li)
 
 total+=r.kcal
 
@@ -94,17 +91,100 @@ total+=r.kcal
 
 document.getElementById("totalHoy").textContent=total.toFixed(0)
 
+dibujarCalorias()
+
 }
 
-function añadirEjercicio(){
+function guardarPeso(){
 
 let fecha=document.getElementById("fechaHoy").value
-let nombre=document.getElementById("ejercicioNombreHoy").value
-let kcal=document.getElementById("ejercicioKcalHoy").value
+let peso=document.getElementById("pesoInput").value
 
-ejercicios.push({fecha,nombre,kcal})
+pesos.push({fecha,peso})
 
-localStorage.setItem("ejercicios",JSON.stringify(ejercicios))
+localStorage.setItem("pesos",JSON.stringify(pesos))
+
+dibujarPeso()
+
+}
+
+function dibujarPeso(){
+
+let fechas=pesos.map(p=>p.fecha)
+let valores=pesos.map(p=>p.peso)
+
+new Chart(document.getElementById("graficoPeso"),{
+
+type:"line",
+
+data:{
+labels:fechas,
+datasets:[{label:"Peso",data:valores}]
+}
+
+})
+
+}
+
+function dibujarCalorias(){
+
+let datos={}
+
+registros.forEach(r=>{
+
+if(!datos[r.fecha]) datos[r.fecha]=0
+
+datos[r.fecha]+=r.kcal
+
+})
+
+let fechas=Object.keys(datos)
+let kcal=Object.values(datos)
+
+new Chart(document.getElementById("graficoCalorias"),{
+
+type:"line",
+
+data:{
+labels:fechas,
+datasets:[{label:"Calorías",data:kcal}]
+}
+
+})
+
+}
+
+function verHistorial(){
+
+let fecha=document.getElementById("fechaHistorial").value
+
+let lista=document.getElementById("historialLista")
+
+lista.innerHTML=""
+
+registros.filter(r=>r.fecha===fecha).forEach(r=>{
+
+let li=document.createElement("li")
+
+li.textContent=r.tipo+" "+r.alimento+" "+r.gramos+"g"
+
+lista.appendChild(li)
+
+})
+
+}
+
+function leerEtiqueta(){
+
+let file=document.getElementById("imagen").files[0]
+
+Tesseract.recognize(file,'spa').then(({data:{text}})=>{
+
+let kcal=text.match(/\d+\s?kcal/i)
+
+if(kcal) document.getElementById("kcal").value=kcal[0].replace("kcal","")
+
+})
 
 }
 

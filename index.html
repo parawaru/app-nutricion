@@ -18,14 +18,9 @@
 
 <body>
 
-<div id="app">
-
 <header>
-
 <h1>Registro Kcal</h1>
-
 </header>
-
 
 <main>
 
@@ -35,17 +30,27 @@
 
 <input type="date" id="fechaHoy">
 
-<div id="listaHoy"></div>
+<div class="comida">
+
+<h3>Desayuno</h3>
+<ul id="desayuno"></ul>
+
+<h3>Almuerzo</h3>
+<ul id="almuerzo"></ul>
+
+<h3>Comida</h3>
+<ul id="comida"></ul>
+
+<h3>Merienda</h3>
+<ul id="merienda"></ul>
+
+<h3>Cena</h3>
+<ul id="cena"></ul>
+
+</div>
 
 <h3>Total kcal</h3>
 <p id="totalHoy">0</p>
-
-<h3>Ejercicio</h3>
-
-<input id="ejercicioNombreHoy" placeholder="Ejercicio">
-<input id="ejercicioKcalHoy" placeholder="Kcal">
-
-<button onclick="añadirEjercicio()">Añadir ejercicio</button>
 
 </section>
 
@@ -81,11 +86,8 @@
 
 <button onclick="leerEtiqueta()">Leer etiqueta</button>
 
-<input id="nombre" placeholder="Nombre">
+<input id="nombre" placeholder="Nombre alimento">
 <input id="kcal" placeholder="Kcal /100g">
-<input id="proteinas" placeholder="Proteínas">
-<input id="hidratos" placeholder="Hidratos">
-<input id="grasas" placeholder="Grasas">
 
 <button onclick="guardarAlimento()">Guardar alimento</button>
 
@@ -99,7 +101,6 @@
 <h2>Progreso</h2>
 
 <h3>Gráfico calorías</h3>
-
 <canvas id="graficoCalorias"></canvas>
 
 <h3>Peso</h3>
@@ -137,8 +138,6 @@
 <button onclick="cambiarPantalla('historial')">📅</button>
 
 </nav>
-
-</div>
 
 <script src="app.js"></script>
 
